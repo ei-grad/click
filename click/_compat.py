@@ -293,7 +293,7 @@ else:
 
         # Otherwise, it's only a compatible stream if we did not ask for
         # an encoding.
-        if encoding is None:
+        if encoding is None and errors is None:
             return stream_encoding is not None
 
         return False
@@ -302,9 +302,10 @@ else:
         if _is_binary_reader(text_reader, False):
             binary_reader = text_reader
         else:
-            # If there is no target encoding set, we need to verify that the
-            # reader is not actually misconfigured.
-            if encoding is None and not _stream_is_misconfigured(text_reader):
+            # If there is no target encoding and error handling set, we need to
+            # verify that the reader is not actually misconfigured.
+            if errors is None and encoding is None \
+                    and not _stream_is_misconfigured(text_reader):
                 return text_reader
 
             if _is_compatible_text_stream(text_reader, encoding, errors):
